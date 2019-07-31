@@ -54,8 +54,7 @@ pluginBundle {
     website = 'https://github.com/figaf/api-management-gradle-plugin'
     vcsUrl = 'https://github.com/figaf/api-management-gradle-plugin.git'
     description = 'Figaf API Management Plugin'
-//    TODO tags
-    tags = ['sap', 'api-management', 'figaf']
+    tags = ['sap', 'api-portal', 'api-management', 'figaf']
 
     plugins {
         apiManagementPlugin {
