@@ -11,6 +11,7 @@ The tasks can be configured through an extension `apiManagementPlugin` which acc
 * `url`* - basic path to the API Management agent. Example: `https://apiportalxxx.hanatrial.ondemand.com`
 * `username`* - API Management username. Example: `S00000000`
 * `password`* - API Management password. Example: `123456`
+* `platformType`* - Cloud platform type. `NEO` or `CLOUD_FOUNDRY`. Default value: `NEO`.
 * `sourceFilePath`* - path to the directory with the APIProxy. Default value: `$project.projectDir` which means
 that root directory of the APIProxy will be taken. In most cases this parameter shouldn't be overridden but it can be any valid path.
 Example: `C:\some\path`
