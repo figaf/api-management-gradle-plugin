@@ -1,7 +1,8 @@
 package com.figaf.plugin.tasks;
 
-import com.figaf.plugin.ApiManagementClient;
+import com.figaf.plugin.client.ApiManagementClient;
 import com.figaf.plugin.entities.ApiManagementConnectionProperties;
+import com.figaf.plugin.entities.CloudPlatformType;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.collections4.CollectionUtils;
@@ -28,6 +29,9 @@ public abstract class AbstractApiProxyTask extends DefaultTask {
 
     @Input
     protected String password;
+
+    @Input
+    protected CloudPlatformType platformType;
 
     @Input
     protected String sourceFilePath;
@@ -57,7 +61,7 @@ public abstract class AbstractApiProxyTask extends DefaultTask {
     protected abstract void doTaskAction() throws Exception;
 
     private void defineParameters() {
-        apiManagementConnectionProperties = new ApiManagementConnectionProperties(url, username, password);
+        apiManagementConnectionProperties = new ApiManagementConnectionProperties(url, username, password, platformType);
         System.out.println("apiManagementConnectionProperties = " + apiManagementConnectionProperties);
         sourceFolder = new File(sourceFilePath);
 

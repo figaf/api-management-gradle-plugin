@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +14,7 @@ import java.util.regex.Pattern;
  */
 @NoArgsConstructor
 @Getter
-@ToString(of = {"protocol", "host", "port", "username"})
+@ToString(of = {"protocol", "host", "port", "username", "platformType"})
 public class ApiManagementConnectionProperties {
 
     private String url;
@@ -22,8 +23,9 @@ public class ApiManagementConnectionProperties {
     private Integer port;
     private String username;
     private String password;
+    private CloudPlatformType platformType;
 
-    public ApiManagementConnectionProperties(String url, String username, String password) {
+    public ApiManagementConnectionProperties(String url, String username, String password, CloudPlatformType platformType) {
         Pattern pattern = Pattern.compile("(https?):\\/\\/([^:]+):*(\\d*)");
         Matcher matcher = pattern.matcher(url);
         if (matcher.find()) {
@@ -37,5 +39,19 @@ public class ApiManagementConnectionProperties {
         this.url = url;
         this.username = username;
         this.password = password;
+        this.platformType = platformType;
     }
+
+    public String getUrlRemovingDefaultPortIfNecessary() {
+        if ("http".equals(protocol) && Objects.equals(port,80) || "https".equals(protocol) && Objects.equals(port,443)) {
+            return buildUrl(protocol, host, null);
+        } else {
+            return buildUrl(protocol, host, port);
+        }
+    }
+
+    private static String buildUrl(String protocol, String host, Integer port) {
+        return String.format("%s://%s%s", protocol, host, port != null ? ":" + port : "");
+    }
+
 }

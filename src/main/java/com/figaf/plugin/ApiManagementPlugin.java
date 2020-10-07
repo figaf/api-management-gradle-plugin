@@ -1,5 +1,6 @@
 package com.figaf.plugin;
 
+import com.figaf.plugin.entities.CloudPlatformType;
 import com.figaf.plugin.tasks.AbstractApiProxyTask;
 import com.figaf.plugin.tasks.DownloadApiProxyTask;
 import com.figaf.plugin.tasks.UploadApiProxyTask;
@@ -31,6 +32,12 @@ public class ApiManagementPlugin implements Plugin<Project> {
             abstractApiProxyTask.setUrl(extension.getUrl().getOrNull());
             abstractApiProxyTask.setUsername(extension.getUsername().getOrNull());
             abstractApiProxyTask.setPassword(extension.getPassword().getOrNull());
+            String platformTypeString = extension.getPlatformType().getOrNull();
+            if (platformTypeString != null) {
+                abstractApiProxyTask.setPlatformType(CloudPlatformType.valueOf(platformTypeString));
+            } else {
+                abstractApiProxyTask.setPlatformType(CloudPlatformType.NEO);
+            }
             abstractApiProxyTask.setApiProxyName(extension.getApiProxyName().getOrNull());
             abstractApiProxyTask.setSourceFilePath(extension.getSourceFilePath().getOrNull());
             SetProperty<String> ignoreFilesListProperty = extension.getIgnoreFilesList();
