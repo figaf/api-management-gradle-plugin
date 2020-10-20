@@ -29,6 +29,7 @@ public class ApiManagementPlugin implements Plugin<Project> {
 
     private void applyExtension(AbstractApiProxyTask abstractApiProxyTask, ApiManagementPluginExtension extension) {
         try {
+            abstractApiProxyTask.setGroup("api-mgmt-plugin");
             abstractApiProxyTask.setUrl(extension.getUrl().getOrNull());
             abstractApiProxyTask.setUsername(extension.getUsername().getOrNull());
             abstractApiProxyTask.setPassword(extension.getPassword().getOrNull());
