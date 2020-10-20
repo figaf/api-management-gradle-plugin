@@ -49,7 +49,7 @@ public class DownloadApiProxyTask extends AbstractApiProxyTask {
                 }
             }
 
-            byte[] bundledModel = apiManagementClient.downloadApiProxy(apiManagementConnectionProperties, apiProxyName);
+            byte[] bundledModel = apiProxyObjectClient.downloadApiProxy(commonClientWrapperEntity, apiProxyName);
             FileUtils.writeByteArrayToFile(apiProxyZipArchiveFile, bundledModel);
             ZipUtil.unpack(apiProxyZipArchiveFile, sourceFolder);
         } finally {

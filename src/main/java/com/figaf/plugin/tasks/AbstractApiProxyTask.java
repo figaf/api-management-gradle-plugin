@@ -1,8 +1,10 @@
 package com.figaf.plugin.tasks;
 
-import com.figaf.plugin.client.ApiManagementClient;
-import com.figaf.plugin.entities.ApiManagementConnectionProperties;
-import com.figaf.plugin.entities.CloudPlatformType;
+import com.figaf.integration.apimgmt.client.ApiProxyObjectClient;
+import com.figaf.integration.common.entity.CloudPlatformType;
+import com.figaf.integration.common.entity.CommonClientWrapperEntity;
+import com.figaf.integration.common.entity.ConnectionProperties;
+import com.figaf.integration.common.entity.Platform;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.collections4.CollectionUtils;
@@ -20,6 +22,8 @@ import java.util.Set;
 @Setter
 @ToString
 public abstract class AbstractApiProxyTask extends DefaultTask {
+
+    private final static String SSO_URL = "https://accounts.sap.com/saml2/idp/sso";
 
     @Input
     protected String url;
@@ -42,11 +46,13 @@ public abstract class AbstractApiProxyTask extends DefaultTask {
     @Input
     protected Set<String> ignoreFilesList;
 
-    protected ApiManagementConnectionProperties apiManagementConnectionProperties;
+    protected ConnectionProperties apiManagementConnectionProperties;
+
+    protected CommonClientWrapperEntity commonClientWrapperEntity;
 
     protected File sourceFolder;
 
-    protected ApiManagementClient apiManagementClient = new ApiManagementClient();
+    protected ApiProxyObjectClient apiProxyObjectClient = new ApiProxyObjectClient(SSO_URL);
 
     @TaskAction
     public void taskAction() {
@@ -61,8 +67,15 @@ public abstract class AbstractApiProxyTask extends DefaultTask {
     protected abstract void doTaskAction() throws Exception;
 
     private void defineParameters() {
-        apiManagementConnectionProperties = new ApiManagementConnectionProperties(url, username, password, platformType);
+        apiManagementConnectionProperties = new ConnectionProperties(url, username, password);
         System.out.println("apiManagementConnectionProperties = " + apiManagementConnectionProperties);
+
+        commonClientWrapperEntity = new CommonClientWrapperEntity();
+        commonClientWrapperEntity.setCloudPlatformType(platformType);
+        commonClientWrapperEntity.setConnectionProperties(apiManagementConnectionProperties);
+        commonClientWrapperEntity.setPlatform(Platform.API_MANAGEMENT);
+        commonClientWrapperEntity.setRestTemplateWrapperKey("");
+
         sourceFolder = new File(sourceFilePath);
 
         if (apiProxyName == null) {
