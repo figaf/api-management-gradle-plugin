@@ -2,9 +2,9 @@ package com.figaf.plugin.tasks;
 
 import com.figaf.integration.apimgmt.client.ApiProxyObjectClient;
 import com.figaf.integration.common.entity.CloudPlatformType;
-import com.figaf.integration.common.entity.CommonClientWrapperEntity;
 import com.figaf.integration.common.entity.ConnectionProperties;
 import com.figaf.integration.common.entity.Platform;
+import com.figaf.integration.common.entity.RequestContext;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.collections4.CollectionUtils;
@@ -48,7 +48,7 @@ public abstract class AbstractApiProxyTask extends DefaultTask {
 
     protected ConnectionProperties apiManagementConnectionProperties;
 
-    protected CommonClientWrapperEntity commonClientWrapperEntity;
+    protected RequestContext requestContext;
 
     protected File sourceFolder;
 
@@ -70,11 +70,11 @@ public abstract class AbstractApiProxyTask extends DefaultTask {
         apiManagementConnectionProperties = new ConnectionProperties(url, username, password);
         System.out.println("apiManagementConnectionProperties = " + apiManagementConnectionProperties);
 
-        commonClientWrapperEntity = new CommonClientWrapperEntity();
-        commonClientWrapperEntity.setCloudPlatformType(platformType);
-        commonClientWrapperEntity.setConnectionProperties(apiManagementConnectionProperties);
-        commonClientWrapperEntity.setPlatform(Platform.API_MANAGEMENT);
-        commonClientWrapperEntity.setRestTemplateWrapperKey("");
+        requestContext = new RequestContext();
+        requestContext.setCloudPlatformType(platformType);
+        requestContext.setConnectionProperties(apiManagementConnectionProperties);
+        requestContext.setPlatform(Platform.API_MANAGEMENT);
+        requestContext.setRestTemplateWrapperKey("");
 
         sourceFolder = new File(sourceFilePath);
 

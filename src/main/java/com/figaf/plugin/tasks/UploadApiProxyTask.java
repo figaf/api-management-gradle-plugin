@@ -47,7 +47,7 @@ public class UploadApiProxyTask extends AbstractApiProxyTask {
             bos.close();
             byte[] bundledModel = bos.toByteArray();
 
-            apiProxyObjectClient.uploadApiProxy(commonClientWrapperEntity, apiProxyName, bundledModel);
+            apiProxyObjectClient.uploadApiProxy(requestContext, apiProxyName, bundledModel);
         } finally {
             FileUtils.deleteDirectory(directoryWithExcludedFiles);
         }
