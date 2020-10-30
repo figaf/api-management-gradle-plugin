@@ -1,6 +1,6 @@
 package com.figaf.plugin;
 
-import com.figaf.plugin.entities.CloudPlatformType;
+import com.figaf.integration.common.entity.CloudPlatformType;
 import com.figaf.plugin.tasks.AbstractApiProxyTask;
 import com.figaf.plugin.tasks.DownloadApiProxyTask;
 import com.figaf.plugin.tasks.UploadApiProxyTask;

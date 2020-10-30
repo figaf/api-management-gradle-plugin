@@ -6,31 +6,25 @@ plugins {
     id 'maven-publish'
 }
 
+group = 'com.figaf'
+version = '1.2.SNAPSHOT'
+
+repositories {
+    jcenter()
+    maven { url "https://jitpack.io" }
+    mavenLocal()
+}
+
 dependencies {
     compile gradleApi()
     compileOnly 'org.projectlombok:lombok:1.18.8'
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
-    compile group: 'commons-codec', name: 'commons-codec', version: '1.2'
-    compile group: 'commons-io', name: 'commons-io', version: '2.5'
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
-    compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
-    compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.10'
-    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
-    compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.3'
-    compile group: 'org.json', name: 'json', version: '20180813'
-    compile group: 'org.zeroturnaround', name: 'zt-zip', version: '1.13'
-    compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.0'
-    compile group: 'org.jsoup', name: 'jsoup', version :'1.13.1'
-    compile group: 'org.springframework', name: 'spring-web', version: '5.1.4.RELEASE'
-    testCompile group: 'junit', name: 'junit', version: '4.4'
-}
 
-repositories {
-    jcenter()
-}
+    compile 'org.zeroturnaround:zt-zip:1.13'
+    compile 'com.github.figaf:apimgmt-api:1.0'
 
-group = 'com.figaf'
-version = '1.1.RELEASE'
+    testCompile 'junit:junit:4.4'
+}
 
 publishing {
     publications {
