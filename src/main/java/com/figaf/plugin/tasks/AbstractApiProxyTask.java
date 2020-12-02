@@ -5,6 +5,7 @@ import com.figaf.integration.common.entity.CloudPlatformType;
 import com.figaf.integration.common.entity.ConnectionProperties;
 import com.figaf.integration.common.entity.Platform;
 import com.figaf.integration.common.entity.RequestContext;
+import com.figaf.integration.common.factory.HttpClientsFactory;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.collections4.CollectionUtils;
@@ -52,7 +53,7 @@ public abstract class AbstractApiProxyTask extends DefaultTask {
 
     protected File sourceFolder;
 
-    protected ApiProxyObjectClient apiProxyObjectClient = new ApiProxyObjectClient(SSO_URL);
+    protected ApiProxyObjectClient apiProxyObjectClient = new ApiProxyObjectClient(SSO_URL, new HttpClientsFactory());
 
     @TaskAction
     public void taskAction() {
