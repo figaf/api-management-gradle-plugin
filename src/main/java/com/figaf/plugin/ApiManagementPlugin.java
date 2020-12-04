@@ -5,6 +5,7 @@ import com.figaf.plugin.enumeration.ApiManagementObjectType;
 import com.figaf.plugin.tasks.AbstractApiManagementObjectTask;
 import com.figaf.plugin.tasks.DownloadApiManagementObjectTask;
 import com.figaf.plugin.tasks.UploadApiManagementObjectTask;
+import com.figaf.integration.common.factory.HttpClientsFactory;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.provider.SetProperty;
@@ -56,6 +57,9 @@ public class ApiManagementPlugin implements Plugin<Project> {
             abstractApiManagementObjectTask.setIgnoreFilesList(ignoreFilesList);
             abstractApiManagementObjectTask.setApiManagementObjectType(
                 ApiManagementObjectType.valueOf(extension.getApiManagementObjectType().getOrNull())
+            );
+            abstractApiManagementObjectTask.setHttpClientsFactory(
+                extension.getHttpClientsFactory().getOrElse(new HttpClientsFactory())
             );
         } catch (Exception ex) {
             ex.printStackTrace();

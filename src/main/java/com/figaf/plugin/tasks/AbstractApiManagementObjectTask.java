@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.figaf.integration.apimgmt.client.ApiProxyObjectClient;
 import com.figaf.integration.apimgmt.client.KeyMapEntriesClient;
-import com.figaf.integration.apimgmt.entity.KeyMapEntryValue;
 import com.figaf.integration.common.entity.CloudPlatformType;
 import com.figaf.integration.common.entity.ConnectionProperties;
 import com.figaf.integration.common.entity.Platform;
 import com.figaf.integration.common.entity.RequestContext;
 import com.figaf.plugin.enumeration.ApiManagementObjectType;
+import com.figaf.integration.common.factory.HttpClientsFactory;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.collections4.CollectionUtils;
@@ -62,15 +62,18 @@ public abstract class AbstractApiManagementObjectTask extends DefaultTask {
     @Input
     protected ApiManagementObjectType apiManagementObjectType;
 
+    @Input
+    protected HttpClientsFactory httpClientsFactory;
+
     protected ConnectionProperties apiManagementConnectionProperties;
 
     protected RequestContext requestContext;
 
     protected File sourceFolder;
 
-    protected ApiProxyObjectClient apiProxyObjectClient = new ApiProxyObjectClient(SSO_URL);
+    protected ApiProxyObjectClient apiProxyObjectClient;
 
-    protected KeyMapEntriesClient keyMapEntriesClient = new KeyMapEntriesClient(SSO_URL);
+    protected KeyMapEntriesClient keyMapEntriesClient;
 
     @TaskAction
     public void taskAction() {
@@ -87,6 +90,10 @@ public abstract class AbstractApiManagementObjectTask extends DefaultTask {
     private void defineParameters() {
         apiManagementConnectionProperties = new ConnectionProperties(url, username, password);
         System.out.println("apiManagementConnectionProperties = " + apiManagementConnectionProperties);
+        System.out.println("httpClientsFactory = " + httpClientsFactory);
+
+        apiProxyObjectClient = new ApiProxyObjectClient(SSO_URL, httpClientsFactory);
+        keyMapEntriesClient = new KeyMapEntriesClient(SSO_URL, httpClientsFactory);
 
         requestContext = new RequestContext();
         requestContext.setCloudPlatformType(platformType);
