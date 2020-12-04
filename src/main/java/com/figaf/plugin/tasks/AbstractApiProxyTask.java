@@ -47,13 +47,16 @@ public abstract class AbstractApiProxyTask extends DefaultTask {
     @Input
     protected Set<String> ignoreFilesList;
 
+    @Input
+    protected HttpClientsFactory httpClientsFactory;
+
     protected ConnectionProperties apiManagementConnectionProperties;
 
     protected RequestContext requestContext;
 
     protected File sourceFolder;
 
-    protected ApiProxyObjectClient apiProxyObjectClient = new ApiProxyObjectClient(SSO_URL, new HttpClientsFactory());
+    protected ApiProxyObjectClient apiProxyObjectClient;
 
     @TaskAction
     public void taskAction() {
@@ -70,6 +73,9 @@ public abstract class AbstractApiProxyTask extends DefaultTask {
     private void defineParameters() {
         apiManagementConnectionProperties = new ConnectionProperties(url, username, password);
         System.out.println("apiManagementConnectionProperties = " + apiManagementConnectionProperties);
+        System.out.println("httpClientsFactory = " + httpClientsFactory);
+
+        apiProxyObjectClient = new ApiProxyObjectClient(SSO_URL, httpClientsFactory);
 
         requestContext = new RequestContext();
         requestContext.setCloudPlatformType(platformType);
