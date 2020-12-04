@@ -27,6 +27,8 @@ public class ApiManagementPluginExtension {
 
     private final SetProperty<String> ignoreFilesList;
 
+    private final Property<String> apiManagementObjectType;
+
     public ApiManagementPluginExtension(Project project) {
         this.url = project.getObjects().property(String.class);
         this.username = project.getObjects().property(String.class);
@@ -35,5 +37,6 @@ public class ApiManagementPluginExtension {
         this.sourceFilePath = project.getObjects().property(String.class);
         this.apiProxyName = project.getObjects().property(String.class);
         this.ignoreFilesList = project.getObjects().setProperty(String.class);
+        this.apiManagementObjectType = project.getObjects().property(String.class);
     }
 }

@@ -1,10 +1,16 @@
 package com.figaf.plugin.tasks;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.figaf.integration.apimgmt.client.ApiProxyObjectClient;
+import com.figaf.integration.apimgmt.client.KeyMapEntriesClient;
+import com.figaf.integration.apimgmt.entity.KeyMapEntryValue;
 import com.figaf.integration.common.entity.CloudPlatformType;
 import com.figaf.integration.common.entity.ConnectionProperties;
 import com.figaf.integration.common.entity.Platform;
 import com.figaf.integration.common.entity.RequestContext;
+import com.figaf.plugin.enumeration.ApiManagementObjectType;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.collections4.CollectionUtils;
@@ -13,15 +19,22 @@ import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.TaskAction;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Arsenii Istlentev
  */
 @Setter
 @ToString
-public abstract class AbstractApiProxyTask extends DefaultTask {
+public abstract class AbstractApiManagementObjectTask extends DefaultTask {
+
+    protected final static ObjectMapper jsonMapper = new ObjectMapper();
+
+    static {
+        jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        jsonMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        jsonMapper.enable(SerializationFeature.INDENT_OUTPUT);
+    }
 
     private final static String SSO_URL = "https://accounts.sap.com/saml2/idp/sso";
 
@@ -41,10 +54,13 @@ public abstract class AbstractApiProxyTask extends DefaultTask {
     protected String sourceFilePath;
 
     @Input
-    protected String apiProxyName;
+    protected String apiManagementObjectName;
 
     @Input
     protected Set<String> ignoreFilesList;
+
+    @Input
+    protected ApiManagementObjectType apiManagementObjectType;
 
     protected ConnectionProperties apiManagementConnectionProperties;
 
@@ -53,6 +69,8 @@ public abstract class AbstractApiProxyTask extends DefaultTask {
     protected File sourceFolder;
 
     protected ApiProxyObjectClient apiProxyObjectClient = new ApiProxyObjectClient(SSO_URL);
+
+    protected KeyMapEntriesClient keyMapEntriesClient = new KeyMapEntriesClient(SSO_URL);
 
     @TaskAction
     public void taskAction() {
@@ -78,8 +96,8 @@ public abstract class AbstractApiProxyTask extends DefaultTask {
 
         sourceFolder = new File(sourceFilePath);
 
-        if (apiProxyName == null) {
-            apiProxyName = sourceFolder.getName();
+        if (apiManagementObjectName == null) {
+            apiManagementObjectName = sourceFolder.getName();
         }
 
         if (CollectionUtils.isEmpty(ignoreFilesList)) {
@@ -90,7 +108,7 @@ public abstract class AbstractApiProxyTask extends DefaultTask {
         ignoreFilesList.add("gradle.properties");
         ignoreFilesList.add("settings.gradle");
 
-        System.out.println("apiProxyName = " + apiProxyName);
+        System.out.println("apiManagementObjectName = " + apiManagementObjectName);
         System.out.println("ignoreFilesList = " + ignoreFilesList);
     }
 }
