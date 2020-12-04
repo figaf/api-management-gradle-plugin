@@ -19,3 +19,5 @@ Example: `C:\some\path`
 you can define this parameter directly. Example: `MyAPIProxy`
 * `ignoreFilesList` - list of files (or directories) which shouldn't be added to the archive when the plugin executes `uploadApiProxy` task and shouldn't be modified when the plugin executes `downloadApiProxy` task.
 The plugin always adds to this list the following paths: `src/test`, `build.gradle`, `gradle.properties`, `settings.gradle`. Example: `["somefile.txt", "somefolder"]`
+* `httpClientsFactory` - configuration for http requests. Its constructor has the following parameters: `useProxyForConnections`, `connectionRequestTimeout`, `connectTimeout`, `socketTimeout`.
+If not provided it will use the following default values: `false`, `300000`, `300000`, `300000`.
