@@ -18,5 +18,7 @@ Example: `C:\some\path`
 * `apiManagementObjectType`* - Type of artifact for which the tasks will be executed. `API_PROXY` or `KEY_VALUE_MAP`.
 * `apiManagementObjectName` - APIProxy/Key Value Map name. By default the name of the folder is used. If your project structure is not standard
 you can define this parameter directly. Example: `MyAPIProxy`
-* `ignoreFilesList` - list of files (or directories) which shouldn't be added to the archive when the plugin executes `uploadApiManagementObject` task and shouldn't be modified when the plugin executes `downloadApiManagementObject` task.
+* `ignoreFilesList` - list of files (or directories) which shouldn't be added to the archive when the plugin executes `uploadApiProxy` task and shouldn't be modified when the plugin executes `downloadApiProxy` task.
 The plugin always adds to this list the following paths: `src/test`, `build.gradle`, `gradle.properties`, `settings.gradle`. Example: `["somefile.txt", "somefolder"]`
+* `httpClientsFactory` - configuration for http requests. Its constructor has the following parameters: `useProxyForConnections`, `connectionRequestTimeout`, `connectTimeout`, `socketTimeout`.
+If not provided it will use the following default values: `false`, `300000`, `300000`, `300000`.
