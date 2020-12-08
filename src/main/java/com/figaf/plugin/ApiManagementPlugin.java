@@ -1,6 +1,7 @@
 package com.figaf.plugin;
 
 import com.figaf.integration.common.entity.CloudPlatformType;
+import com.figaf.integration.common.factory.HttpClientsFactory;
 import com.figaf.plugin.tasks.AbstractApiProxyTask;
 import com.figaf.plugin.tasks.DownloadApiProxyTask;
 import com.figaf.plugin.tasks.UploadApiProxyTask;
@@ -47,6 +48,7 @@ public class ApiManagementPlugin implements Plugin<Project> {
                 ignoreFilesList.addAll(ignoreFilesListProperty.get());
             }
             abstractApiProxyTask.setIgnoreFilesList(ignoreFilesList);
+            abstractApiProxyTask.setHttpClientsFactory(extension.getHttpClientsFactory().getOrElse(new HttpClientsFactory()));
 
         } catch (Exception ex) {
             ex.printStackTrace();
