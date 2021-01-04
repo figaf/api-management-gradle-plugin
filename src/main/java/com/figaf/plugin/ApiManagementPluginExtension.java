@@ -28,6 +28,8 @@ public class ApiManagementPluginExtension {
 
     private final SetProperty<String> ignoreFilesList;
 
+    private final Property<String> apiManagementObjectType;
+
     private final Property<HttpClientsFactory> httpClientsFactory;
 
     public ApiManagementPluginExtension(Project project) {
@@ -38,6 +40,7 @@ public class ApiManagementPluginExtension {
         this.sourceFilePath = project.getObjects().property(String.class);
         this.apiProxyName = project.getObjects().property(String.class);
         this.ignoreFilesList = project.getObjects().setProperty(String.class);
+        this.apiManagementObjectType = project.getObjects().property(String.class);
         this.httpClientsFactory = project.getObjects().property(HttpClientsFactory.class);
     }
 }

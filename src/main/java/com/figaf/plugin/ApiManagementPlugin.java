@@ -1,10 +1,11 @@
 package com.figaf.plugin;
 
 import com.figaf.integration.common.entity.CloudPlatformType;
+import com.figaf.plugin.enumeration.ApiManagementObjectType;
+import com.figaf.plugin.tasks.AbstractApiManagementObjectTask;
+import com.figaf.plugin.tasks.DownloadApiManagementObjectTask;
+import com.figaf.plugin.tasks.UploadApiManagementObjectTask;
 import com.figaf.integration.common.factory.HttpClientsFactory;
-import com.figaf.plugin.tasks.AbstractApiProxyTask;
-import com.figaf.plugin.tasks.DownloadApiProxyTask;
-import com.figaf.plugin.tasks.UploadApiProxyTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.provider.SetProperty;
@@ -22,34 +23,44 @@ public class ApiManagementPlugin implements Plugin<Project> {
 
         ApiManagementPluginExtension extension = project.getExtensions().create("apiManagementPlugin", ApiManagementPluginExtension.class, project);
 
-        project.getTasks().register("uploadApiProxy", UploadApiProxyTask.class, uploadApiProxy -> applyExtension(uploadApiProxy, extension));
+        project.getTasks().register(
+            "uploadApiManagementObject",
+            UploadApiManagementObjectTask.class, uploadApiManagementObject -> applyExtension(uploadApiManagementObject, extension)
+        );
 
-        project.getTasks().register("downloadApiProxy", DownloadApiProxyTask.class, downloadApiProxy -> applyExtension(downloadApiProxy, extension));
+        project.getTasks().register(
+            "downloadApiManagementObject",
+            DownloadApiManagementObjectTask.class, downloadApiManagementObject -> applyExtension(downloadApiManagementObject, extension)
+        );
 
     }
 
-    private void applyExtension(AbstractApiProxyTask abstractApiProxyTask, ApiManagementPluginExtension extension) {
+    private void applyExtension(AbstractApiManagementObjectTask abstractApiManagementObjectTask, ApiManagementPluginExtension extension) {
         try {
-            abstractApiProxyTask.setGroup("api-mgmt-plugin");
-            abstractApiProxyTask.setUrl(extension.getUrl().getOrNull());
-            abstractApiProxyTask.setUsername(extension.getUsername().getOrNull());
-            abstractApiProxyTask.setPassword(extension.getPassword().getOrNull());
+            abstractApiManagementObjectTask.setGroup("api-mgmt-plugin");
+            abstractApiManagementObjectTask.setUrl(extension.getUrl().getOrNull());
+            abstractApiManagementObjectTask.setUsername(extension.getUsername().getOrNull());
+            abstractApiManagementObjectTask.setPassword(extension.getPassword().getOrNull());
             String platformTypeString = extension.getPlatformType().getOrNull();
             if (platformTypeString != null) {
-                abstractApiProxyTask.setPlatformType(CloudPlatformType.valueOf(platformTypeString));
+                abstractApiManagementObjectTask.setPlatformType(CloudPlatformType.valueOf(platformTypeString));
             } else {
-                abstractApiProxyTask.setPlatformType(CloudPlatformType.NEO);
+                abstractApiManagementObjectTask.setPlatformType(CloudPlatformType.NEO);
             }
-            abstractApiProxyTask.setApiProxyName(extension.getApiProxyName().getOrNull());
-            abstractApiProxyTask.setSourceFilePath(extension.getSourceFilePath().getOrNull());
+            abstractApiManagementObjectTask.setApiManagementObjectName(extension.getApiProxyName().getOrNull());
+            abstractApiManagementObjectTask.setSourceFilePath(extension.getSourceFilePath().getOrNull());
             SetProperty<String> ignoreFilesListProperty = extension.getIgnoreFilesList();
             Set<String> ignoreFilesList = new HashSet<>();
             if (ignoreFilesListProperty != null && ignoreFilesListProperty.isPresent()) {
                 ignoreFilesList.addAll(ignoreFilesListProperty.get());
             }
-            abstractApiProxyTask.setIgnoreFilesList(ignoreFilesList);
-            abstractApiProxyTask.setHttpClientsFactory(extension.getHttpClientsFactory().getOrElse(new HttpClientsFactory()));
-
+            abstractApiManagementObjectTask.setIgnoreFilesList(ignoreFilesList);
+            abstractApiManagementObjectTask.setApiManagementObjectType(
+                ApiManagementObjectType.valueOf(extension.getApiManagementObjectType().getOrNull())
+            );
+            abstractApiManagementObjectTask.setHttpClientsFactory(
+                extension.getHttpClientsFactory().getOrElse(new HttpClientsFactory())
+            );
         } catch (Exception ex) {
             ex.printStackTrace();
             throw ex;
