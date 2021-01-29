@@ -1,6 +1,120 @@
 # api-management-gradle-plugin
 This plugin provides an integration with SAP API management platform. It can be managed Api Proxy objects and non encrypted key value map objects by this plugin.
 
+## Requirements
+
+Gradle 4.10 or later.
+
+## Getting started
+
+You need to organize modular structure, where each separate API Proxy/Key Value Mapping folder is a Gradle module.
+Default project structure:
+```
+rootProject
+├── apiProxy1TechnicalName
+│   └── ...
+├── apiProxy2TechnicalName
+│   └── ...
+├── keyValueMap1TechnicalName
+│   └── ...
+├── keyValueMap2TechnicalName
+│   └── ...       
+├── ...
+├── build.gradle
+└── gradle.properties
+```
+Use `downloadApiManagementObject` task to fetch and automatically unpack bundled API Proxy and Key Value Mapping sources. Just create a high-level folders for needed objects, where name of the folder is a technical name of the object. Then register these folders as a modules in `settings.gradle` (see later) and run `downloadApiManagementObject` task.
+
+build.gradle
+```
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+plugins {
+    id 'com.figaf.api-management-plugin' version '2.0.RELEASE' apply false
+}
+
+configure(subprojects.findAll()) { sub ->
+
+    if (sub.name.startsWith("apiproxy-")) {
+
+        apply plugin: 'com.figaf.api-management-plugin'
+
+        apiManagementPlugin {
+            url = apiManagementUrl
+            username = apiManagementUsername
+            password = apiManagementPassword
+            platformType = cloudPlatformType
+            sourceFilePath = "$project.projectDir".toString()
+            apiManagementObjectType = 'API_PROXY'
+            httpClientsFactory = new com.figaf.integration.common.factory.HttpClientsFactory(
+                project.hasProperty('connectionSettings.useProxyForConnections') ? project.property('connectionSettings.useProxyForConnections').toBoolean() : false,
+                project.hasProperty('connectionSettings.connectionRequestTimeout') ? project.property('connectionSettings.connectionRequestTimeout').toInteger() : 300000,
+                project.hasProperty('connectionSettings.connectTimeout') ? project.property('connectionSettings.connectTimeout').toInteger() : 300000,
+                project.hasProperty('connectionSettings.socketTimeout') ? project.property('connectionSettings.socketTimeout').toInteger() : 300000
+            )
+        }
+    }
+
+    if (sub.name.startsWith("keyvaluemap-")) {
+
+        apply plugin: 'com.figaf.api-management-plugin'
+
+        apiManagementPlugin {
+            url = apiManagementUrl
+            username = apiManagementUsername
+            password = apiManagementPassword
+            platformType = cloudPlatformType
+            sourceFilePath = "$project.projectDir".toString()
+            apiManagementObjectType = 'KEY_VALUE_MAP'
+            httpClientsFactory = new com.figaf.integration.common.factory.HttpClientsFactory(
+                project.hasProperty('connectionSettings.useProxyForConnections') ? project.property('connectionSettings.useProxyForConnections').toBoolean() : false,
+                project.hasProperty('connectionSettings.connectionRequestTimeout') ? project.property('connectionSettings.connectionRequestTimeout').toInteger() : 300000,
+                project.hasProperty('connectionSettings.connectTimeout') ? project.property('connectionSettings.connectTimeout').toInteger() : 300000,
+                project.hasProperty('connectionSettings.socketTimeout') ? project.property('connectionSettings.socketTimeout').toInteger() : 300000
+            )
+        }
+    }
+
+}
+```
+
+settings.gradle
+```
+pluginManagement {
+    repositories {
+        mavenLocal()
+        maven { url "https://jitpack.io" }
+        gradlePluginPortal()
+    }
+}
+
+include "apiproxy-apiProxy1TechnicalName"
+project (":apiproxy-apiProxy1TechnicalName").projectDir = file("apiProxy1TechnicalName")
+
+include "apiproxy-apiProxy2TechnicalName"
+project (":apiproxy-apiProxy2TechnicalName").projectDir = file("apiProxy2TechnicalName")
+
+include "keyvaluemap-keyValueMap1TechnicalName"
+project (":keyvaluemap-keyValueMap1TechnicalName").projectDir = file("keyValueMap1TechnicalName")
+
+include "keyvaluemap-keyValueMap2TechnicalName"
+project (":keyvaluemap-keyValueMap2TechnicalName").projectDir = file("keyValueMap2TechnicalName")
+```
+
+gradle.properties
+```
+apiManagementUrl=https://<...>.hana.ondemand.com:443
+apiManagementUsername=user@company.com
+apiManagementPassword=123456
+cloudPlatformType=CLOUD_FOUNDRY
+```
+
 ## Tasks
 The plugin has 2 tasks
 1. `uploadApiManagementObject` - upload APIProxy/Key Value Map to API Management platform
