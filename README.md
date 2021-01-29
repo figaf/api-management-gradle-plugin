@@ -1,5 +1,5 @@
 # api-management-gradle-plugin
-This plugin provides an integration with SAP API management platform. It can be managed Api Proxy objects and non encrypted key value map objects by this plugin.
+This plugin provides an integration with SAP API management platform. You can manage Api Proxy objects and non encrypted key value map objects using this plugin.
 
 ## Requirements
 
