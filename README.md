@@ -21,6 +21,7 @@ rootProject
 │   └── ...       
 ├── ...
 ├── build.gradle
+├── settings.gradle
 └── gradle.properties
 ```
 Use `downloadApiManagementObject` task to fetch and automatically unpack bundled API Proxy and Key Value Mapping sources. Just create a high-level folders for needed objects, where name of the folder is a technical name of the object. Then register these folders as a modules in `settings.gradle` (see later) and run `downloadApiManagementObject` task.
