@@ -36,8 +36,6 @@ public abstract class AbstractApiManagementObjectTask extends DefaultTask {
         jsonMapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
-    private final static String SSO_URL = "https://accounts.sap.com/saml2/idp/sso";
-
     @Input
     protected String url;
 
@@ -92,8 +90,8 @@ public abstract class AbstractApiManagementObjectTask extends DefaultTask {
         System.out.println("apiManagementConnectionProperties = " + apiManagementConnectionProperties);
         System.out.println("httpClientsFactory = " + httpClientsFactory);
 
-        apiProxyObjectClient = new ApiProxyObjectClient(SSO_URL, httpClientsFactory);
-        keyMapEntriesClient = new KeyMapEntriesClient(SSO_URL, httpClientsFactory);
+        apiProxyObjectClient = new ApiProxyObjectClient(httpClientsFactory);
+        keyMapEntriesClient = new KeyMapEntriesClient(httpClientsFactory);
 
         requestContext = new RequestContext();
         requestContext.setCloudPlatformType(platformType);
