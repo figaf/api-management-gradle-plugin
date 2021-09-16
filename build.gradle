@@ -10,7 +10,7 @@ group = 'com.figaf'
 version = '2.4.RELEASE'
 
 repositories {
-    jcenter()
+    mavenCentral()
     maven { url "https://jitpack.io" }
     mavenLocal()
 }
