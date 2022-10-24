@@ -22,6 +22,16 @@ public class ApiManagementPluginExtension {
 
     private final Property<String> platformType;
 
+    private final Property<String> oauthTokenUrl;
+
+    private final Property<String> authenticationType;
+
+    private final Property<String> publicApiUrl;
+
+    private final Property<String> publicApiClientId;
+
+    private final Property<String> publicApiClientSecret;
+
     private final Property<String> sourceFilePath;
 
     private final Property<String> apiProxyName;
@@ -37,6 +47,11 @@ public class ApiManagementPluginExtension {
         this.username = project.getObjects().property(String.class);
         this.password = project.getObjects().property(String.class);
         this.platformType = project.getObjects().property(String.class);
+        this.oauthTokenUrl = project.getObjects().property(String.class);
+        this.authenticationType = project.getObjects().property(String.class);
+        this.publicApiUrl = project.getObjects().property(String.class);
+        this.publicApiClientId = project.getObjects().property(String.class);
+        this.publicApiClientSecret = project.getObjects().property(String.class);
         this.sourceFilePath = project.getObjects().property(String.class);
         this.apiProxyName = project.getObjects().property(String.class);
         this.ignoreFilesList = project.getObjects().setProperty(String.class);
