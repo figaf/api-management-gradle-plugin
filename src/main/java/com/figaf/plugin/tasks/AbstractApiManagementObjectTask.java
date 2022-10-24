@@ -5,15 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.figaf.integration.apimgmt.client.ApiProxyObjectClient;
 import com.figaf.integration.apimgmt.client.KeyMapEntriesClient;
-import com.figaf.integration.common.entity.CloudPlatformType;
-import com.figaf.integration.common.entity.ConnectionProperties;
-import com.figaf.integration.common.entity.Platform;
-import com.figaf.integration.common.entity.RequestContext;
+import com.figaf.integration.common.entity.*;
 import com.figaf.plugin.enumeration.ApiManagementObjectType;
 import com.figaf.integration.common.factory.HttpClientsFactory;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.TaskAction;
@@ -47,6 +45,21 @@ public abstract class AbstractApiManagementObjectTask extends DefaultTask {
 
     @Input
     protected CloudPlatformType platformType;
+
+    @Input
+    protected String oauthTokenUrl;
+
+    @Input
+    protected AuthenticationType authenticationType;
+
+    @Input
+    protected String publicApiUrl;
+
+    @Input
+    protected String publicApiClientId;
+
+    @Input
+    protected String publicApiClientSecret;
 
     @Input
     protected String sourceFilePath;
@@ -86,9 +99,16 @@ public abstract class AbstractApiManagementObjectTask extends DefaultTask {
     protected abstract void doTaskAction() throws Exception;
 
     private void defineParameters() {
-        apiManagementConnectionProperties = new ConnectionProperties(url, username, password);
+        if (AuthenticationType.OAUTH.equals(authenticationType) && StringUtils.isNotEmpty(publicApiUrl)) {
+            apiManagementConnectionProperties = new ConnectionProperties(publicApiUrl, username, password);
+        } else {
+            apiManagementConnectionProperties = new ConnectionProperties(url, username, password);
+        }
         System.out.println("apiManagementConnectionProperties = " + apiManagementConnectionProperties);
         System.out.println("httpClientsFactory = " + httpClientsFactory);
+        System.out.println("oauthTokenUrl = " + oauthTokenUrl);
+        System.out.println("authenticationType = " + authenticationType);
+        System.out.println("publicApiClientId = " + publicApiClientId);
 
         apiProxyObjectClient = new ApiProxyObjectClient(httpClientsFactory);
         keyMapEntriesClient = new KeyMapEntriesClient(httpClientsFactory);
@@ -97,6 +117,10 @@ public abstract class AbstractApiManagementObjectTask extends DefaultTask {
         requestContext.setCloudPlatformType(platformType);
         requestContext.setConnectionProperties(apiManagementConnectionProperties);
         requestContext.setPlatform(Platform.API_MANAGEMENT);
+        requestContext.setOauthUrl(oauthTokenUrl);
+        requestContext.setAuthenticationType(authenticationType);
+        requestContext.setClientId(publicApiClientId);
+        requestContext.setClientSecret(publicApiClientSecret);
         requestContext.setRestTemplateWrapperKey("");
 
         sourceFolder = new File(sourceFilePath);

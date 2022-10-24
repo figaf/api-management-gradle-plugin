@@ -37,7 +37,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.figaf.api-management-plugin' version '2.0.RELEASE' apply false
+    id 'com.figaf.api-management-plugin' version '2.7.RELEASE' apply false
 }
 
 configure(subprojects.findAll()) { sub ->
@@ -51,6 +51,11 @@ configure(subprojects.findAll()) { sub ->
             username = apiManagementUsername
             password = apiManagementPassword
             platformType = cloudPlatformType
+            oauthTokenUrl = "$project.oauthTokenUrl"
+            authenticationType = "$project.authenticationType"
+            publicApiUrl = "$project.publicApiUrl"
+            publicApiClientId = "$project.publicApiClientId"
+            publicApiClientSecret = "$project.publicApiClientSecret"
             sourceFilePath = "$project.projectDir".toString()
             apiManagementObjectType = 'API_PROXY'
             httpClientsFactory = new com.figaf.integration.common.factory.HttpClientsFactory(
@@ -71,6 +76,11 @@ configure(subprojects.findAll()) { sub ->
             username = apiManagementUsername
             password = apiManagementPassword
             platformType = cloudPlatformType
+            oauthTokenUrl = "$project.oauthTokenUrl"
+            authenticationType = "$project.authenticationType"
+            publicApiUrl = "$project.publicApiUrl"
+            publicApiClientId = "$project.publicApiClientId"
+            publicApiClientSecret = "$project.publicApiClientSecret"
             sourceFilePath = "$project.projectDir".toString()
             apiManagementObjectType = 'KEY_VALUE_MAP'
             httpClientsFactory = new com.figaf.integration.common.factory.HttpClientsFactory(

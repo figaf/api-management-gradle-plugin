@@ -1,11 +1,13 @@
 package com.figaf.plugin;
 
+import com.figaf.integration.common.entity.AuthenticationType;
 import com.figaf.integration.common.entity.CloudPlatformType;
 import com.figaf.plugin.enumeration.ApiManagementObjectType;
 import com.figaf.plugin.tasks.AbstractApiManagementObjectTask;
 import com.figaf.plugin.tasks.DownloadApiManagementObjectTask;
 import com.figaf.plugin.tasks.UploadApiManagementObjectTask;
 import com.figaf.integration.common.factory.HttpClientsFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.provider.SetProperty;
@@ -47,6 +49,16 @@ public class ApiManagementPlugin implements Plugin<Project> {
             } else {
                 abstractApiManagementObjectTask.setPlatformType(CloudPlatformType.NEO);
             }
+            abstractApiManagementObjectTask.setOauthTokenUrl(extension.getOauthTokenUrl().getOrNull());
+            String authenticationTypeString = extension.getAuthenticationType().getOrNull();
+            if (StringUtils.isNotEmpty(authenticationTypeString)) {
+                abstractApiManagementObjectTask.setAuthenticationType(AuthenticationType.valueOf(authenticationTypeString));
+            } else {
+                abstractApiManagementObjectTask.setAuthenticationType(AuthenticationType.BASIC);
+            }
+            abstractApiManagementObjectTask.setPublicApiUrl(extension.getPublicApiUrl().getOrNull());
+            abstractApiManagementObjectTask.setPublicApiClientId(extension.getPublicApiClientId().getOrNull());
+            abstractApiManagementObjectTask.setPublicApiClientSecret(extension.getPublicApiClientSecret().getOrNull());
             abstractApiManagementObjectTask.setApiManagementObjectName(extension.getApiProxyName().getOrNull());
             abstractApiManagementObjectTask.setSourceFilePath(extension.getSourceFilePath().getOrNull());
             SetProperty<String> ignoreFilesListProperty = extension.getIgnoreFilesList();
