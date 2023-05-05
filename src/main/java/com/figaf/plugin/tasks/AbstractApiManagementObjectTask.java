@@ -109,6 +109,7 @@ public abstract class AbstractApiManagementObjectTask extends DefaultTask {
         System.out.println("oauthTokenUrl = " + oauthTokenUrl);
         System.out.println("authenticationType = " + authenticationType);
         System.out.println("publicApiClientId = " + publicApiClientId);
+        System.out.println("apiManagementObjectType = " + apiManagementObjectType);
 
         apiProxyObjectClient = new ApiProxyObjectClient(httpClientsFactory);
         keyMapEntriesClient = new KeyMapEntriesClient(httpClientsFactory);
